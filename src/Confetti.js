@@ -23,27 +23,51 @@ export default class Confetti {
         }
 
         this.canvas.addEventListener('mousedown', this.onDown.bind(this), false);
+        this.canvas.addEventListener('touchstart', this.onDown.bind(this), false);
         this.canvas.addEventListener('mousemove', this.onMove.bind(this), false);
+        this.canvas.addEventListener('touchmove', this.onMove.bind(this), false);
         this.canvas.addEventListener('mouseup', this.onUp.bind(this), false);
+        this.canvas.addEventListener('touchend', this.onUp.bind(this), false);
 
         this.papers = [];
         this.animate();
     }
 
     onDown(e){
+        let x = e.clientX;
+        let y = e.clientY;
+
+        if(e?.changedTouches){
+            x = e.changedTouches[0].clientX;
+            y = e.changedTouches[0].clientY;
+        }
+
         this.mouse.releasePos = undefined;
         this.mouse.isDown = true;
         const rect = this.canvas.getBoundingClientRect();
-        if(!this.mouse.downPos) this.mouse.downPos = new Vector(e.clientX - rect.left, e.clientY - rect.top);
-        this.mouse.downPos.x = e.clientX - rect.left;
-        this.mouse.downPos.y = e.clientY - rect.top;
+        if(!this.mouse.downPos) {
+            this.mouse.downPos = new Vector(x - rect.left, y - rect.top);
+        }
+        this.mouse.downPos.x = x - rect.left;
+        this.mouse.downPos.y = y - rect.top;
     }
 
     onMove(e){
         const rect = this.canvas.getBoundingClientRect();
-        if(!this.mouse.vector) this.mouse.vector = new Vector(e.clientX - rect.left, e.clientY - rect.top);
-        this.mouse.vector.x = e.clientX - rect.left;
-        this.mouse.vector.y = e.clientY - rect.top;
+
+        let x = e.clientX;
+        let y = e.clientY;
+
+        if(e?.changedTouches){
+            x = e.changedTouches[0].clientX;
+            y = e.changedTouches[0].clientY;
+        }
+
+        if(!this.mouse.vector) {
+            this.mouse.vector = new Vector(x - rect.left, y - rect.top);
+        }
+        this.mouse.vector.x = x - rect.left;
+        this.mouse.vector.y = y - rect.top;
 
         if(this.mouse.isDown){
             this.mouse.length  = Vector.distance(this.mouse.downPos, this.mouse.vector);
@@ -51,11 +75,21 @@ export default class Confetti {
     }
 
     onUp(e){
+        let x = e.clientX;
+        let y = e.clientY;
+
+        if(e?.changedTouches){
+            x = e.changedTouches[0].clientX;
+            y = e.changedTouches[0].clientY;
+        }
+
         this.mouse.isDown = false;
         const rect = this.canvas.getBoundingClientRect();
-        if(!this.mouse.releasePos) this.mouse.releasePos = new Vector(e.clientX - rect.left, e.clientY - rect.top);
-        this.mouse.releasePos.x = e.clientX - rect.left;
-        this.mouse.releasePos.y = e.clientY - rect.top;
+        if(!this.mouse.releasePos) {
+            this.mouse.releasePos = new Vector(x - rect.left, y - rect.top);
+        }
+        this.mouse.releasePos.x = x - rect.left;
+        this.mouse.releasePos.y = y - rect.top;
 
         const deg = radToDeg(Vector.angle(this.mouse.releasePos, this.mouse.downPos))
 
