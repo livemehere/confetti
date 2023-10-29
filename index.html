@@ -16,10 +16,36 @@
         canvas {
             display: block;
         }
+
+        section{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: sans-serif;
+            color: #fff;
+        }
+
+        button{
+            background: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
+
     </style>
   </head>
   <body>
     <canvas></canvas>
+    <section id="desc">
+      <button>OK</button>
+      <p>Click and Release to create Confetti !</p>
+    </section>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
